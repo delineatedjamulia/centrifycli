@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>netcoreapp9.0</TargetFramework>
     <Copyright>Copyright © $([System.DateTime]::UtcNow.Year) Centrify Corporation ($([System.DateTime]::UtcNow.ToString("s")))</Copyright>
     <StartupObject>CentrifyCLI.Ccli</StartupObject>
     <Company>Centrify</Company>

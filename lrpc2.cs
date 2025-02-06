@@ -187,7 +187,7 @@ namespace CentrifyCLI
             {
                 br.BaseStream.Seek(0, SeekOrigin.Begin);
                 byte[] data = new byte[br.BaseStream.Length];
-                br.BaseStream.Read(data, 0, Convert.ToInt32(br.BaseStream.Length));                
+		br.BaseStream.ReadExactly(data);
             }
         }
 
@@ -246,7 +246,7 @@ namespace CentrifyCLI
             byte[] handshakePayload = BitConverter.GetBytes(LRPC2Constants.HANDSHAKE_PAYLOAD);
             m_pipeClient.Write(handshakePayload, 0, 4);
             byte[] handshakeAck = new byte[8];
-            m_pipeClient.Read(handshakeAck, 0, 8);
+	    m_pipeClient.ReadExactly(handshakeAck);
             if (BitConverter.ToInt32(handshakeAck, 0) != LRPC2Constants.HANDSHAKE_ACK)
             {
                 throw new ApplicationException(string.Format("LRPC2 handshake failed. Received Ack: {0}", Convert.ToBase64String(handshakeAck)));
@@ -286,12 +286,12 @@ namespace CentrifyCLI
 
             //Read response
             byte[] responseHeaderBytes = new byte[LRPC2Constants.HEADER_LENGTH];
-            m_pipeClient.Read(responseHeaderBytes, 0, LRPC2Constants.HEADER_LENGTH);
+	    m_pipeClient.ReadExactly(responseHeaderBytes);
             header = new LRPC2Header(responseHeaderBytes);
             if (header.SequenceNumber == randomSequenceNumber)
             {
                 byte[] responseMessageBytes = new byte[header.MessageDataLength];
-                m_pipeClient.Read(responseMessageBytes, 0, (int)header.MessageDataLength);
+		m_pipeClient.ReadExactly(responseMessageBytes);
                 using (MemoryStream ms = new MemoryStream(responseMessageBytes))
                 {
                     using (BinaryReader br = new BinaryReader(ms))
